@@ -13,15 +13,27 @@ var io= socketIO(server);
 io.on('connection', (socket) =>{
 	console.log("new user connected");
 
-	socket.emit('newEmail',{
-		frome:'yvtsan',
-		text:'new emaiil from yvtsan',
-		createAt:123
-	});
+	// socket.emit('newEmail',{
+	// 	frome:'yvtsan',
+	// 	text:'new emaiil from yvtsan',
+	// 	createAt:123
+	// });
 
-	socket.on('creatEmail',(newEmail)=>{
-		console.log('creatEmail',newEmail)});
+	socket.on('createMessage',(message)=>{
+		console.log('createMessage',message)
+	// 	io.emit('newMessage',{;
+	// 		from: message.from,
+	// 		text: message.text,
+	// 		createAt: new Date().getTime()
+	// 	});
+	// 	});
 
+	socket.broadcast.emit('newMessage',{
+		 		from: message.from,
+			text: message.text,
+			createAt: new Date().getTime()
+		});
+  });
 	socket.on('disconnect',()=>{
 		console.log('the user was disconnect ')
 	})
