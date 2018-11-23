@@ -3,6 +3,7 @@ const http=require('http')
 const express= require('express');
 const socketIO= require('socket.io');
 
+const {generetMessage}=require('./util/message');
 const publicPath=path.join(__dirname, '../public');
 const port=process.env.PORT||3000;
 
@@ -13,32 +14,30 @@ var io= socketIO(server);
 io.on('connection', (socket) =>{
 	console.log("new user connected");
 
-	// socket.emit('newEmail',{
-	// 	frome:'yvtsan',
-	// 	text:'new emaiil from yvtsan',
-	// 	createAt:123
-	// });
+	 socket.emit('newMessage',generetMessage('admin','welcome'));
 
-	socket.on('createMessage',(message)=>{
+	 socket.broadcast.emit('newMessage',generetMessage('admin','new user joined'));
+
+	socket.on('createMessage',(message,callback)=>{
 		console.log('createMessage',message)
-	// 	io.emit('newMessage',{;
+	 	io.emit('newMessage',generetMessage(message.from,message.text));
+	   callback('this is from the server');
+
 	// 		from: message.from,
 	// 		text: message.text,
 	// 		createAt: new Date().getTime()
 	// 	});
 	// 	});
 
-	socket.broadcast.emit('newMessage',{
-		 		from: message.from,
-			text: message.text,
-			createAt: new Date().getTime()
-		});
-  });
+   // send message for 
+	// socket.broadcast.emit('newMessage',generetMessage('admin','welcom to the chat app'));
+ //  });
 	socket.on('disconnect',()=>{
 		console.log('the user was disconnect ')
 	})
 
-})
+});
+	});
 app.use(express.static(publicPath));
 
 server.listen(port, () => {

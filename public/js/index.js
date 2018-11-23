@@ -7,7 +7,7 @@ var socket = io();
 			// 	to:'adress',
 			// 	text:'helllo'
 			// });
-		});
+		
 
 		socket.on('disconnect',function(){
 			console.log('unebale to connect to the server')
@@ -17,4 +17,26 @@ var socket = io();
 
 		socket.on('newMessage',function(message){
 			console.log('newMessage',message);
+		 var li= jQuery('<li></li>');
+		 li.text(`${message.from}: ${message.text}`)
+
+		 jQuery('#messages').append(li);
+		});
+
+		// socket.emit('createMessage', {
+		// 	from:'mike',
+		// 	text: 'hello yvtsan'
+		// }, function (data) {
+		// 	console.log('got it',data);
+		// 	});
+		});
+		jQuery('#message-form').on('submit', function (e) {
+			e.preventDefault();
+
+			socket.emit('createMessage', {
+				from: 'User',
+				text: jQuery('[name=message').val()
+			},function () {
+
+			})
 		})
